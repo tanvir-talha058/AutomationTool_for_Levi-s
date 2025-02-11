@@ -10,15 +10,6 @@ A Python-based GUI tool for automating data entry into websites using Selenium. 
 - 🤖 Automate data entry with Selenium
 - 🎨 Modern, minimal UI
 
-## 🎯 Usage
-1. Run the script:
-   ```sh
-   python web_automation.py
-   ```
-2. Click **"Upload Excel"** to select your file.
-3. Follow on-screen instructions to select input fields and submit buttons.
-4. Click **"Start Automation"** to begin data entry.
-
 
 ## 🤝 Contributing
 Contributions are welcome! Feel free to submit issues or pull requests.
