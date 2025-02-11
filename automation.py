@@ -10,6 +10,8 @@ class WebAutomationTool:
     def __init__(self, root):
         self.root = root
         self.root.title("Web Automation Tool")
+        self.root.geometry("400x300")
+        self.root.configure(bg="#f0f0f0")
         self.file_path = ""
         self.data = None
         self.driver = None
@@ -17,41 +19,47 @@ class WebAutomationTool:
         self.submit_button = None
         
         # UI Elements
-        self.label = tk.Label(root, text="Select an Excel file:")
-        self.label.pack()
+        self.label = tk.Label(root, text="Select an Excel file:", bg="#f0f0f0", font=("Arial", 12))
+        self.label.pack(pady=10)
         
-        self.upload_btn = tk.Button(root, text="Upload Excel", command=self.upload_file)
-        self.upload_btn.pack()
+        self.upload_btn = tk.Button(root, text="Upload your Excel file", command=self.upload_file, bg="#4CAF50", fg="white", font=("Arial", 10))
+        self.upload_btn.pack(pady=5)
         
-        self.start_btn = tk.Button(root, text="Start Automation", command=self.start_automation, state=tk.DISABLED)
-        self.start_btn.pack()
+        self.start_btn = tk.Button(root, text="Start Automation", command=self.start_automation, state=tk.DISABLED, bg="#008CBA", fg="white", font=("Arial", 10))
+        self.start_btn.pack(pady=5)
         
-        self.stop_btn = tk.Button(root, text="Stop Automation", command=self.stop_automation, state=tk.DISABLED)
-        self.stop_btn.pack()
+        self.stop_btn = tk.Button(root, text="Stop Automation", command=self.stop_automation, state=tk.DISABLED, bg="#f44336", fg="white", font=("Arial", 10))
+        self.stop_btn.pack(pady=5)
         
     def upload_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
         if self.file_path:
-            self.data = pd.read_excel(self.file_path)
-            messagebox.showinfo("Success", "Excel file loaded successfully!")
-            self.start_btn.config(state=tk.NORMAL)
+            try:
+                self.data = pd.read_excel(self.file_path)
+                messagebox.showinfo("Success", "Excel file loaded successfully!")
+                self.start_btn.config(state=tk.NORMAL)
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to load Excel file: {e}")
     
     def start_automation(self):
         if self.data is None:
             messagebox.showerror("Error", "Please upload an Excel file first.")
             return
         
-        # Start WebDriver
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://www.calculatorsoup.com/calculators/conversions/numberstowords.php")  # Replace with actual website
-        
-        messagebox.showinfo("Instructions", "Click on the input box and then press ENTER.")
-        self.input_box = self.get_element()
-        
-        messagebox.showinfo("Instructions", "Click on the submit button and then press ENTER.")
-        self.submit_button = self.get_element()
-        
-        self.process_data()
+        try:
+            # Start WebDriver
+            self.driver = webdriver.Chrome()
+            self.driver.get("https://www.google.com/")  # Replace with actual website
+            
+            messagebox.showinfo("Instructions", "Click on the input box and then press ENTER.")
+            self.input_box = self.get_element()
+            
+            messagebox.showinfo("Instructions", "Click on the submit button and then press ENTER.")
+            self.submit_button = self.get_element()
+            
+            self.process_data()
+        except Exception as e:
+            messagebox.showerror("Error", f"Automation failed: {e}")
     
     def get_element(self):
         while True:
@@ -61,14 +69,17 @@ class WebAutomationTool:
             time.sleep(1)
     
     def process_data(self):
-        for index, row in self.data.iterrows():
-            self.input_box.clear()
-            self.input_box.send_keys(str(row[0]))  # Assuming first column has data
-            self.submit_button.click()
-            time.sleep(2)  # Adjust based on website response time
-        
-        messagebox.showinfo("Completed", "All data submitted successfully!")
-        self.driver.quit()
+        try:
+            for index, row in self.data.iterrows():
+                self.input_box.clear()
+                self.input_box.send_keys(str(row.iloc[0]))  # Assuming first column has data
+                self.submit_button.click()
+                time.sleep(2)  # Adjust based on website response time
+            
+            messagebox.showinfo("Completed", "All data submitted successfully!")
+            self.driver.quit()
+        except Exception as e:
+            messagebox.showerror("Error", f"Data submission failed: {e}")
     
     def stop_automation(self):
         if self.driver:
