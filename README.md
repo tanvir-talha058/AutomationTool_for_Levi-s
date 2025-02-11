@@ -1,35 +1,32 @@
-Web Automation Tool
+# Web Automation Tool
 
-A Python-based GUI tool that automates data entry on any website using Selenium and an Excel file. Users can select an input field and a submit button, and the tool will enter data from the Excel sheet until completion.
+![Python](https://img.shields.io/badge/Python-3.x-blue) ![Selenium](https://img.shields.io/badge/Selenium-Automation-green) ![Tkinter](https://img.shields.io/badge/Tkinter-GUI-orange)
 
-Features
+A Python-based GUI tool for automating data entry into websites using Selenium. This tool allows users to upload an Excel sheet, select input fields and submit buttons on a webpage, and automatically input data until the file is fully processed.
 
-Upload Excel File: Supports .xlsx files.
+## 🚀 Features
+- 📂 Upload Excel files for data automation
+- 🔍 Select input fields and submit buttons dynamically
+- 🤖 Automate data entry with Selenium
+- 🎨 Modern, minimal UI
 
-Automated Data Entry: Select the input box and submit button, and the tool handles the rest.
+## 🎯 Usage
+1. Run the script:
+   ```sh
+   python web_automation.py
+   ```
+2. Click **"Upload Excel"** to select your file.
+3. Follow on-screen instructions to select input fields and submit buttons.
+4. Click **"Start Automation"** to begin data entry.
 
-Modern UI: A clean, minimalistic, and user-friendly interface.
 
-Cross-Browser Compatibility: Works with Google Chrome (support for more browsers can be added).
+## 🤝 Contributing
+Contributions are welcome! Feel free to submit issues or pull requests.
 
-Stop Automation: Stop the automation process at any time.
+## 📜 License
+[MIT License](LICENSE)
 
-Installation
+---
+### 📩 Contact
+For any issues, feel free to reach out!
 
-Prerequisites
-
-Ensure you have Python installed (preferably 3.8+). Then install dependencies:
-
-pip install -r requirements.txt
-
-Dependencies
-
-tkinter (Built-in GUI module)
-
-selenium (For web automation)
-
-pandas (For handling Excel files)
-
-openpyxl (For reading .xlsx files`)
-
-webdriver-manager (Auto-manages ChromeDriver)
