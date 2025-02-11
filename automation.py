@@ -3,33 +3,36 @@ from tkinter import filedialog, messagebox
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import time
 
 class WebAutomationTool:
     def __init__(self, root):
         self.root = root
         self.root.title("Web Automation Tool")
-        self.root.geometry("400x300")
-        self.root.configure(bg="#f0f0f0")
+        self.root.geometry("300x400")
+        self.root.configure(bg="#fdfefe")  # Light background
         self.file_path = ""
         self.data = None
         self.driver = None
         self.input_box = None
         self.submit_button = None
         
+        # Header Label
+        self.header = tk.Label(root, text="Web Automation", bg="#3B7097", fg="white", font=("Arial", 14, "bold"), padx=10, pady=5)
+        self.header.pack(fill=tk.X)
+        
         # UI Elements
-        self.label = tk.Label(root, text="Select an Excel file:", bg="#f0f0f0", font=("Arial", 12))
+        self.label = tk.Label(root, text="Select an Excel file:", bg="#38BFA7", fg="#2C3E50", font=("Arial", 12))
         self.label.pack(pady=10)
         
-        self.upload_btn = tk.Button(root, text="Upload your Excel file", command=self.upload_file, bg="#4CAF50", fg="white", font=("Arial", 10))
-        self.upload_btn.pack(pady=5)
+        self.upload_btn = tk.Button(root, text="⬆ Upload", command=self.upload_file, bg="#524582", fg="white", font=("Arial", 12, "bold"), padx=20, pady=10, relief=tk.FLAT)
+        self.upload_btn.pack(pady=10)
         
-        self.start_btn = tk.Button(root, text="Start Automation", command=self.start_automation, state=tk.DISABLED, bg="#008CBA", fg="white", font=("Arial", 10))
-        self.start_btn.pack(pady=5)
+        self.start_btn = tk.Button(root, text="▶ Start", command=self.start_automation, state=tk.DISABLED, bg="#3675C3", fg="white", font=("Arial", 12, "bold"), padx=20, pady=10, relief=tk.FLAT)
+        self.start_btn.pack(pady=10)
         
-        self.stop_btn = tk.Button(root, text="Stop Automation", command=self.stop_automation, state=tk.DISABLED, bg="#f44336", fg="white", font=("Arial", 10))
-        self.stop_btn.pack(pady=5)
+        self.stop_btn = tk.Button(root, text="⏹ Stop", command=self.stop_automation, state=tk.DISABLED, bg="#C14364", fg="white", font=("Arial", 12, "bold"), padx=20, pady=10, relief=tk.FLAT)
+        self.stop_btn.pack(pady=10)
         
     def upload_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
@@ -47,9 +50,8 @@ class WebAutomationTool:
             return
         
         try:
-            # Start WebDriver
             self.driver = webdriver.Chrome()
-            self.driver.get("https://www.google.com/")  # Replace with actual website
+            self.driver.get("https://www.youtube.com/")  # Replace with actual website
             
             messagebox.showinfo("Instructions", "Click on the input box and then press ENTER.")
             self.input_box = self.get_element()
