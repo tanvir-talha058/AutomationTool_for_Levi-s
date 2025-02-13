@@ -10,14 +10,14 @@ class WebAutomationTool:
         self.root = root
         self.root.title("Web Automation Tool")
         self.root.geometry("300x400")
-        self.root.configure(bg="#fdfefe")  # Light background
+        self.root.configure(bg="#fdfefe")  
         self.file_path = ""
         self.data = None
         self.driver = None
         self.input_box = None
         self.submit_button = None
         
-        # Header Label
+        # Header 
         self.header = tk.Label(root, text="Web Automation", bg="#3B7097", fg="white", font=("Arial", 14, "bold"), padx=10, pady=5)
         self.header.pack(fill=tk.X)
         
@@ -51,7 +51,7 @@ class WebAutomationTool:
         
         try:
             self.driver = webdriver.Chrome()
-            self.driver.get("https://www.youtube.com/")  # Replace with actual website
+            self.driver.get("https://www.youtube.com/")  
             
             messagebox.showinfo("Instructions", "Click on the input box and then press ENTER.")
             self.input_box = self.get_element()
@@ -74,9 +74,9 @@ class WebAutomationTool:
         try:
             for index, row in self.data.iterrows():
                 self.input_box.clear()
-                self.input_box.send_keys(str(row.iloc[0]))  # Assuming first column has data
+                self.input_box.send_keys(str(row.iloc[0]))  
                 self.submit_button.click()
-                time.sleep(2)  # Adjust based on website response time
+                time.sleep(2) 
             
             messagebox.showinfo("Completed", "All data submitted successfully!")
             self.driver.quit()
