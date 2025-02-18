@@ -21,7 +21,7 @@ class WebAutomationTool:
         self.header = tk.Label(root, text="Web Automation", bg="#3B7097", fg="white", font=("Arial", 14, "bold"), padx=10, pady=5)
         self.header.pack(fill=tk.X)
         
-        # UI Elements
+        # UI 
         self.label = tk.Label(root, text="Select an Excel file:", bg="#38BFA7", fg="#2C3E50", font=("Arial", 12))
         self.label.pack(pady=10)
         
