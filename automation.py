@@ -62,7 +62,6 @@ class WebAutomationTool:
             messagebox.showinfo("Instructions", "Click on the submit button and then press ENTER.")
             self.submit_button = self.get_element()
 
-            
             self.process_data()
         except Exception as e:
             messagebox.showerror("Error", f"Automation failed: {e}")
