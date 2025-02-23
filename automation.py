@@ -36,7 +36,6 @@ class WebAutomationTool:
         self.stop_btn.pack(pady=10)
 
     
-    
     def upload_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
         if self.file_path:
