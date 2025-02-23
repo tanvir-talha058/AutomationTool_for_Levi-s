@@ -50,6 +50,7 @@ class WebAutomationTool:
         if self.data is None:
             messagebox.showerror("Error", "Please upload an Excel file first.")
             return
+
         
         try:
             self.driver = webdriver.Chrome()
