@@ -4,6 +4,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
+
 class WebAutomationTool:
     def __init__(self, root):
         self.root = root
