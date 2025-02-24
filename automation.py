@@ -17,7 +17,6 @@ class WebAutomationTool:
         self.input_box = None
         self.submit_button = None
 
-        
         # Header 
         self.header = tk.Label(root, text="Web Automation", bg="#3B7097", fg="white", font=("Arial", 14, "bold"), padx=10, pady=5)
         self.header.pack(fill=tk.X)
