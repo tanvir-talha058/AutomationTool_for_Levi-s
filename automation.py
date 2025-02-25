@@ -62,6 +62,7 @@ class WebAutomationTool:
             self.process_data()
         except Exception as e:
             messagebox.showerror("Error", f"Automation failed: {e}")
+
     
     def get_element(self):
         while True:
