@@ -88,6 +88,7 @@ class WebAutomationTool:
             self.driver.quit()
         messagebox.showinfo("Stopped", "Automation Stopped!")
 
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = WebAutomationTool(root)
