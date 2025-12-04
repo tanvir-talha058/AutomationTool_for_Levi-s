@@ -33,6 +33,7 @@ class WebAutomationTool:
         
         self.stop_btn = tk.Button(root, text="⏹ Stop", command=self.stop_automation, state=tk.DISABLED, bg="#C14364", fg="white", font=("Arial", 12, "bold"), padx=20, pady=10, relief=tk.FLAT)
         self.stop_btn.pack(pady=10)
+
     
     def upload_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
