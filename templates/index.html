@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Automation Tool</title>
+    <meta name="description" content="Web Automation Tool for Levi Strauss & Co. - Automate data entry tasks">
+    <meta name="theme-color" content="#3b82f6">
+    <title>🤖 Automation Tool - Levi's</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%233b82f6'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>⚡</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
     <style>
         :root {
@@ -70,9 +73,33 @@
             gap: 12px;
         }
 
-        .logo-icon { font-size: 28px; }
+        .logo-icon { 
+            font-size: 32px; 
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
         .logo h1 { font-size: 22px; font-weight: 600; }
-        .logo span { color: var(--accent); }
+        .logo span { 
+            color: var(--accent); 
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         .header-actions {
             display: flex;
@@ -81,12 +108,17 @@
         }
 
         .version {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 500;
             color: white;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            to { box-shadow: 0 0 15px rgba(139, 92, 246, 0.7); }
         }
 
         .theme-toggle {
@@ -104,6 +136,7 @@
         }
 
         .theme-toggle:hover { background: var(--border); }
+        .theme-label { font-size: 12px; }
 
         /* Main Layout */
         .main-grid {
@@ -134,7 +167,14 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .card-icon { font-size: 20px; }
+        .card-icon { 
+            font-size: 20px; 
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        .card:hover .card-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
         .card-title { font-size: 16px; font-weight: 600; }
         .card-actions { margin-left: auto; display: flex; gap: 8px; }
 
@@ -208,10 +248,13 @@
 
         .btn-sm { padding: 6px 12px; font-size: 12px; }
         .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
         .btn-success { background: var(--success); color: white; }
+        .btn-success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
         .btn-danger { background: var(--error); color: white; }
+        .btn-danger:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
         .btn-warning { background: var(--warning); color: black; }
+        .btn-warning:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
         .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
         .btn-ghost:hover { background: var(--bg-card); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
@@ -258,7 +301,23 @@
             background: rgba(34, 197, 94, 0.1);
         }
 
-        .upload-icon { font-size: 40px; margin-bottom: 10px; }
+        .upload-icon { 
+            font-size: 48px; 
+            margin-bottom: 10px; 
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .upload-zone:hover .upload-icon {
+            animation: wiggle 0.5s ease-in-out;
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
         .upload-text { color: var(--text-secondary); font-size: 14px; }
 
         .file-clear {
@@ -339,6 +398,22 @@
             border-radius: 5px;
             transition: width 0.3s ease;
             width: 0%;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         .eta-display { text-align: center; color: var(--text-secondary); font-size: 12px; margin-top: 8px; }
 
@@ -359,8 +434,33 @@
             padding: 14px;
             border-radius: 10px;
             text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
         }
-
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            display: block;
+        }
         .stat-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
         .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-success .stat-value { color: var(--success); }
@@ -564,13 +664,15 @@
             <div class="logo">
                 <span class="logo-icon">🤖</span>
                 <h1>Web <span>Automation</span> Tool</h1>
+                <span class="logo-badge">Levi's</span>
             </div>
             <div class="header-actions">
                 <div class="status-badge status-ready" id="statusBadge">
                     <span>●</span> Ready
                 </div>
-                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" data-tooltip="Toggle theme">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" data-tooltip="Toggle theme (T)">
                     <span id="themeIcon">🌙</span>
+                    <span class="theme-label">Dark</span>
                 </button>
                 <button class="btn btn-ghost btn-sm" onclick="toggleShortcuts()" data-tooltip="Keyboard shortcuts">⌨️</button>
                 <span class="version">v3.0</span>
@@ -640,7 +742,7 @@
                     
                     <div class="upload-zone" id="uploadZone">
                         <button class="file-clear" onclick="clearFile(event)" data-tooltip="Remove file">✕</button>
-                        <div class="upload-icon">📤</div>
+                        <div class="upload-icon">�</div>
                         <div class="upload-text">Drop Excel file here or click to upload</div>
                     </div>
                     <input type="file" id="fileInput" accept=".xlsx,.xls">
@@ -718,18 +820,22 @@
                     
                     <div class="stats-grid">
                         <div class="stat-card stat-success">
+                            <span class="stat-icon">✅</span>
                             <div class="stat-value" id="statSuccess">0</div>
                             <div class="stat-label">Success</div>
                         </div>
                         <div class="stat-card stat-error">
+                            <span class="stat-icon">❌</span>
                             <div class="stat-value" id="statFailed">0</div>
                             <div class="stat-label">Failed</div>
                         </div>
                         <div class="stat-card stat-info">
+                            <span class="stat-icon">⏱️</span>
                             <div class="stat-value" id="statTime">00:00</div>
                             <div class="stat-label">Elapsed</div>
                         </div>
                         <div class="stat-card stat-info">
+                            <span class="stat-icon">⚡</span>
                             <div class="stat-value" id="statSpeed">0</div>
                             <div class="stat-label">Per Min</div>
                         </div>
@@ -766,11 +872,12 @@
     </div>
 
     <div class="shortcuts-help" id="shortcutsHelp">
-        <h4>⌨️ Shortcuts</h4>
-        <div class="shortcut-item"><span>Pause/Resume</span><span class="shortcut-key">Space</span></div>
-        <div class="shortcut-item"><span>Stop</span><span class="shortcut-key">Esc</span></div>
-        <div class="shortcut-item"><span>Theme</span><span class="shortcut-key">T</span></div>
-        <div class="shortcut-item"><span>Help</span><span class="shortcut-key">?</span></div>
+        <h4>⌨️ Keyboard Shortcuts</h4>
+        <div class="shortcut-item"><span>⏯️ Pause/Resume</span><span class="shortcut-key">Space</span></div>
+        <div class="shortcut-item"><span>⏹️ Stop</span><span class="shortcut-key">Esc</span></div>
+        <div class="shortcut-item"><span>🎨 Toggle Theme</span><span class="shortcut-key">T</span></div>
+        <div class="shortcut-item"><span>❓ Show Help</span><span class="shortcut-key">?</span></div>
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; color: var(--text-secondary); font-size: 10px;">Press ? to toggle this panel</div>
     </div>
 
     <audio id="soundComplete" preload="auto"><source src="data:audio/wav;base64,UklGRl4FAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YToFAACAgoSGiIqMjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w==" type="audio/wav"></audio>
@@ -784,6 +891,7 @@
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+            document.querySelector('.theme-label').textContent = isLight ? 'Light' : 'Dark';
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
         }
 
@@ -791,6 +899,7 @@
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
                 document.getElementById('themeIcon').textContent = '☀️';
+                document.querySelector('.theme-label').textContent = 'Light';
             }
         }
 

@@ -242,7 +242,6 @@ def get_driver(browser='chrome', headless=False):
     except WebDriverException as e:
         raise Exception(f"Failed to initialize {browser} browser. Make sure it's installed. Error: {str(e)}")
 
-
 def inject_element_selector(driver, element_type='INPUT FIELD'):
     """Inject JavaScript for element selection."""
     js = ELEMENT_SELECTOR_JS.replace('%ELEMENT_TYPE%', element_type)
@@ -437,6 +436,18 @@ def cleanup_uploads():
                     os.remove(filepath)
     except Exception:
         pass
+
+
+@app.route('/favicon.ico')
+def favicon():
+    """Serve favicon to prevent 404 errors."""
+    # Return a simple SVG favicon as data URI
+    svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="#3b82f6"/>
+        <text x="50" y="65" font-size="50" text-anchor="middle" fill="white">⚡</text>
+    </svg>'''
+    from flask import Response
+    return Response(svg, mimetype='image/svg+xml')
 
 
 @app.route('/')
