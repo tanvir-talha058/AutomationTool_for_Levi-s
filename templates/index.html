@@ -44,7 +44,11 @@
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        body * {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
         }
 
         .container {
@@ -149,13 +153,31 @@
             .main-grid { grid-template-columns: 1fr; }
         }
 
+        @media (max-width: 480px) {
+            header { padding: 16px; }
+            .logo h1 { font-size: 18px; }
+            .header-actions { width: 100%; justify-content: flex-end; }
+            .version { display: none; }
+            .btn { padding: 8px 14px; font-size: 13px; }
+            .container { padding: 12px; }
+        }
+
         /* Cards */
         .card {
             background: var(--bg-secondary);
             border-radius: 16px;
             padding: 24px;
             border: 1px solid var(--border);
-            transition: background 0.3s, border-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         .card-header {
@@ -258,6 +280,7 @@
         .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
         .btn-ghost:hover { background: var(--bg-card); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
         /* Tooltips */
@@ -339,6 +362,13 @@
 
         .upload-zone.has-file .file-clear { display: flex; }
 
+        .upload-hint {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
         .file-info {
             background: var(--bg-card);
             padding: 16px;
@@ -360,16 +390,20 @@
             margin-top: 16px;
             overflow-x: auto;
             max-height: 200px;
+            position: relative;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         .data-preview table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
+            min-width: 400px;
         }
 
         .data-preview th, .data-preview td {
-            padding: 8px 12px;
+            padding: 10px 14px;
             text-align: left;
             border-bottom: 1px solid var(--border);
             max-width: 150px;
@@ -384,9 +418,52 @@
             font-weight: 600;
             position: sticky;
             top: 0;
+            z-index: 2;
         }
 
-        .data-preview tr:hover td { background: var(--bg-card); }
+        .data-preview th:first-child,
+        .data-preview td:first-child {
+            position: sticky;
+            left: 0;
+            background: var(--bg-secondary);
+            z-index: 1;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+        }
+
+        .data-preview th:first-child {
+            z-index: 3;
+            background: var(--bg-card);
+        }
+
+        .data-preview tr:hover td { 
+            background: var(--bg-card); 
+        }
+        .data-preview tr:hover td:first-child {
+            background: var(--border);
+        }
+
+        .data-preview::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        /* Scroll indicator for table */
+        .scroll-indicator {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .data-preview:hover .scroll-indicator {
+            opacity: 1;
+        }
 
         /* Progress */
         .progress-container { margin-bottom: 20px; }
@@ -593,6 +670,117 @@
         .hidden { display: none !important; }
         #fileInput { display: none; }
 
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-card) 25%, var(--border) 50%, var(--bg-card) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-text { height: 14px; margin-bottom: 8px; }
+        .skeleton-text:last-child { width: 60%; }
+        .skeleton-row { display: flex; gap: 12px; margin-bottom: 12px; }
+        .skeleton-cell { flex: 1; height: 32px; }
+        .skeleton-header { height: 20px; margin-bottom: 16px; }
+
+        /* Input Validation States */
+        .input-wrapper { position: relative; }
+        .input-wrapper input { padding-right: 36px; }
+        .validation-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .input-wrapper.valid .validation-icon { opacity: 1; color: var(--success); }
+        .input-wrapper.invalid .validation-icon { opacity: 1; color: var(--error); }
+        .input-wrapper.valid input { border-color: var(--success); }
+        .input-wrapper.invalid input { border-color: var(--error); }
+        .input-error-text {
+            font-size: 11px;
+            color: var(--error);
+            margin-top: 4px;
+            display: none;
+        }
+        .input-wrapper.invalid .input-error-text { display: block; }
+
+        /* Progress Paused State */
+        .progress-fill.paused {
+            animation: pausePulse 1.5s ease-in-out infinite;
+        }
+        .progress-fill.paused::after {
+            animation: none;
+        }
+        @keyframes pausePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .empty-state-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        /* Error Boundary */
+        .error-boundary {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 16px 0;
+        }
+        .error-boundary-icon { font-size: 48px; margin-bottom: 12px; }
+        .error-boundary-title { font-size: 16px; font-weight: 600; color: var(--error); margin-bottom: 8px; }
+        .error-boundary-message { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+        .error-boundary-actions { display: flex; gap: 10px; justify-content: center; }
+
+        /* Theme Toggle Animation */
+        .theme-toggle {
+            overflow: hidden;
+        }
+        .theme-toggle #themeIcon {
+            display: inline-block;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .theme-toggle:hover #themeIcon {
+            transform: rotate(20deg);
+        }
+        .theme-toggle.switching #themeIcon {
+            animation: themeSwitch 0.5s ease;
+        }
+        @keyframes themeSwitch {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.3); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
         /* Toast */
         .toast-container {
             position: fixed;
@@ -690,7 +878,11 @@
                     
                     <div class="form-group">
                         <label>Target URL</label>
-                        <input type="url" id="targetUrl" value="https://www.google.com" placeholder="https://example.com" required>
+                        <div class="input-wrapper" id="urlWrapper">
+                            <input type="url" id="targetUrl" value="https://www.google.com" placeholder="https://example.com" required>
+                            <span class="validation-icon" id="urlValidIcon">✓</span>
+                        </div>
+                        <div class="input-error-text" id="urlError">Please enter a valid URL starting with http:// or https://</div>
                     </div>
                     
                     <div class="input-row">
@@ -740,25 +932,55 @@
                         <span class="card-title">Excel File</span>
                     </div>
                     
-                    <div class="upload-zone" id="uploadZone">
-                        <button class="file-clear" onclick="clearFile(event)" data-tooltip="Remove file">✕</button>
-                        <div class="upload-icon">�</div>
-                        <div class="upload-text">Drop Excel file here or click to upload</div>
+                    <div class="upload-zone" id="uploadZone" role="button" aria-label="Upload Excel file" tabindex="0">
+                        <button class="file-clear" onclick="clearFile(event)" data-tooltip="Remove file" aria-label="Remove file">✕</button>
+                        <div class="empty-state" id="uploadEmptyState">
+                            <span class="empty-state-icon">📊</span>
+                            <div class="empty-state-title">No file selected</div>
+                            <div class="empty-state-desc">Drag & drop your Excel file here, or click to browse</div>
+                        </div>
+                        <div class="upload-file-display hidden" id="uploadFileDisplay">
+                            <div class="upload-icon">✅</div>
+                            <div class="upload-text" id="uploadFileName">file.xlsx</div>
+                        </div>
+                        <div class="upload-hint">Supports .xlsx, .xls files up to 16MB</div>
                     </div>
                     <input type="file" id="fileInput" accept=".xlsx,.xls">
                     
+                    <div id="fileInfoSkeleton" class="hidden">
+                        <div class="file-info">
+                            <div class="skeleton-row"><div class="skeleton skeleton-text" style="width: 40%;"></div><div class="skeleton skeleton-text" style="width: 50%;"></div></div>
+                            <div class="skeleton-row"><div class="skeleton skeleton-text" style="width: 30%;"></div><div class="skeleton skeleton-text" style="width: 40%;"></div></div>
+                            <div class="skeleton-row"><div class="skeleton skeleton-text" style="width: 35%;"></div><div class="skeleton skeleton-text" style="width: 45%;"></div></div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div class="skeleton skeleton-header"></div>
+                            <div class="skeleton skeleton-cell" style="height: 40px;"></div>
+                        </div>
+                    </div>
+
+                    <div id="fileError" class="error-boundary hidden">
+                        <div class="error-boundary-icon">⚠️</div>
+                        <div class="error-boundary-title">Failed to load file</div>
+                        <div class="error-boundary-message" id="fileErrorMessage">Something went wrong while processing your file.</div>
+                        <div class="error-boundary-actions">
+                            <button class="btn btn-ghost btn-sm" onclick="clearFileError()">Dismiss</button>
+                            <button class="btn btn-primary btn-sm" onclick="retryFileUpload()">Try Again</button>
+                        </div>
+                    </div>
+
                     <div id="fileInfo" class="hidden">
                         <div class="file-info">
                             <div class="file-info-row">
-                                <span class="file-info-label">File:</span>
+                                <span class="file-info-label">📄 File:</span>
                                 <span id="fileName">-</span>
                             </div>
                             <div class="file-info-row">
-                                <span class="file-info-label">Rows:</span>
+                                <span class="file-info-label">📊 Rows:</span>
                                 <span id="fileRows">-</span>
                             </div>
                             <div class="file-info-row">
-                                <span class="file-info-label">Size:</span>
+                                <span class="file-info-label">💾 Size:</span>
                                 <span id="fileSize">-</span>
                             </div>
                         </div>
@@ -888,6 +1110,10 @@
         let isPaused = false, isRunning = false, currentFilter = 'all', logs = [];
 
         function toggleTheme() {
+            const toggle = document.getElementById('themeToggle');
+            toggle.classList.add('switching');
+            setTimeout(() => toggle.classList.remove('switching'), 500);
+            
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
@@ -992,28 +1218,44 @@
             document.getElementById('stopBtn').disabled = true;
             document.getElementById('confirmInput').classList.remove('active');
             document.getElementById('confirmSubmit').classList.remove('active');
+            document.getElementById('progressFill').classList.remove('paused');
             isPaused = false;
         }
 
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
         uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
         uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
         uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
         uploadZone.addEventListener('drop', (e) => { e.preventDefault(); uploadZone.classList.remove('dragover'); if (e.dataTransfer.files[0]) handleFileUpload(e.dataTransfer.files[0]); });
         fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFileUpload(e.target.files[0]); });
 
+        let lastUploadedFile = null;
+
         async function handleFileUpload(file) {
             if (!file.name.match(/\.(xlsx|xls)$/i)) { showToast('Please upload an Excel file', 'error'); return; }
+            lastUploadedFile = file;
+            
+            // Show skeleton loading
             document.getElementById('uploadLoading').classList.add('active');
+            document.getElementById('fileInfoSkeleton').classList.remove('hidden');
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('fileError').classList.add('hidden');
+            
+            // Update upload zone to show file
+            document.getElementById('uploadEmptyState').classList.add('hidden');
+            document.getElementById('uploadFileDisplay').classList.remove('hidden');
+            document.getElementById('uploadFileName').textContent = file.name;
+            uploadZone.classList.add('has-file');
+            
             const formData = new FormData();
             formData.append('file', file);
             try {
                 const response = await fetch('/api/upload', { method: 'POST', body: formData });
                 const result = await response.json();
                 if (result.success) {
-                    uploadZone.classList.add('has-file');
-                    uploadZone.querySelector('.upload-text').textContent = file.name;
+                    document.getElementById('fileInfoSkeleton').classList.add('hidden');
                     document.getElementById('fileInfo').classList.remove('hidden');
                     document.getElementById('fileName').textContent = result.file.name;
                     document.getElementById('fileRows').textContent = result.file.rows;
@@ -1023,10 +1265,42 @@
                     result.file.columns.forEach(col => { const opt = document.createElement('option'); opt.value = col; opt.textContent = col; select.appendChild(opt); });
                     if (result.file.preview && result.file.preview.length > 0) renderPreview(result.file.columns, result.file.preview);
                     addLog(`File loaded: ${result.file.name} (${result.file.rows} rows)`, 'success');
-                    showToast('File uploaded', 'success');
-                } else { showToast(result.error, 'error'); }
-            } catch (err) { showToast('Upload failed', 'error'); }
+                    showToast('File uploaded successfully!', 'success');
+                } else { 
+                    showFileError(result.error || 'Failed to process file');
+                }
+            } catch (err) { 
+                showFileError('Upload failed. Please check your connection and try again.');
+            }
             finally { document.getElementById('uploadLoading').classList.remove('active'); }
+        }
+        
+        function showFileError(message) {
+            document.getElementById('fileInfoSkeleton').classList.add('hidden');
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('fileError').classList.remove('hidden');
+            document.getElementById('fileErrorMessage').textContent = message;
+            showToast(message, 'error');
+        }
+        
+        function clearFileError() {
+            document.getElementById('fileError').classList.add('hidden');
+            resetUploadZone();
+        }
+        
+        function retryFileUpload() {
+            document.getElementById('fileError').classList.add('hidden');
+            if (lastUploadedFile) {
+                handleFileUpload(lastUploadedFile);
+            } else {
+                fileInput.click();
+            }
+        }
+        
+        function resetUploadZone() {
+            uploadZone.classList.remove('has-file');
+            document.getElementById('uploadEmptyState').classList.remove('hidden');
+            document.getElementById('uploadFileDisplay').classList.add('hidden');
         }
 
         function renderPreview(columns, data) {
@@ -1038,11 +1312,13 @@
         async function clearFile(e) {
             e.stopPropagation();
             await fetch('/api/clear-file', { method: 'POST' });
-            uploadZone.classList.remove('has-file');
-            uploadZone.querySelector('.upload-text').textContent = 'Drop Excel file here or click to upload';
+            resetUploadZone();
             document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('fileInfoSkeleton').classList.add('hidden');
+            document.getElementById('fileError').classList.add('hidden');
             document.getElementById('dataPreview').innerHTML = '';
             fileInput.value = '';
+            lastUploadedFile = null;
             showToast('File removed', 'success');
         }
 
@@ -1082,8 +1358,19 @@
             const result = await response.json();
             isPaused = result.paused;
             const btn = document.getElementById('pauseBtn');
-            if (isPaused) { btn.textContent = '▶ Resume'; setStatus('paused', 'Paused'); addLog('Paused', 'warning'); }
-            else { btn.textContent = '⏸ Pause'; setStatus('running', 'Running'); addLog('Resumed', 'info'); }
+            const progressFill = document.getElementById('progressFill');
+            if (isPaused) { 
+                btn.textContent = '▶ Resume'; 
+                setStatus('paused', 'Paused'); 
+                addLog('Paused', 'warning');
+                progressFill.classList.add('paused');
+            }
+            else { 
+                btn.textContent = '⏸ Pause'; 
+                setStatus('running', 'Running'); 
+                addLog('Resumed', 'info');
+                progressFill.classList.remove('paused');
+            }
         }
 
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1108,6 +1395,29 @@
         });
 
         loadTheme();
+        
+        // Form Validation
+        function validateUrl() {
+            const input = document.getElementById('targetUrl');
+            const wrapper = document.getElementById('urlWrapper');
+            const value = input.value.trim();
+            
+            if (!value) {
+                wrapper.classList.remove('valid', 'invalid');
+                return false;
+            }
+            
+            const isValid = value.startsWith('http://') || value.startsWith('https://');
+            wrapper.classList.toggle('valid', isValid);
+            wrapper.classList.toggle('invalid', !isValid);
+            return isValid;
+        }
+        
+        document.getElementById('targetUrl').addEventListener('input', validateUrl);
+        document.getElementById('targetUrl').addEventListener('blur', validateUrl);
+        
+        // Validate on page load
+        validateUrl();
     </script>
 </body>
 </html>
