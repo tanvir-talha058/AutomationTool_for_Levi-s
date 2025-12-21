@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Web Automation Tool for Levi Strauss & Co. - Automate data entry tasks">
     <meta name="theme-color" content="#3b82f6">
-    <title>🤖 Automation Tool - Levi's</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%233b82f6'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>⚡</text></svg>">
+    <title>Automation Tool - Levi's</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%233b82f6'/><path d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <!-- Flaticon UIcons CSS -->
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
     <style>
         :root {
@@ -78,8 +82,18 @@
         }
 
         .logo-icon { 
-            font-size: 32px; 
+            font-size: 28px;
+            color: var(--accent);
             animation: float 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon i {
+            transition: transform 0.3s ease;
+        }
+        .logo:hover .logo-icon i {
+            transform: rotate(15deg) scale(1.1);
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -191,11 +205,18 @@
 
         .card-icon { 
             font-size: 20px; 
-            display: inline-block;
-            transition: transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--accent);
         }
         .card:hover .card-icon {
             transform: scale(1.2) rotate(5deg);
+            color: var(--success);
+        }
+        .card-icon i {
+            transition: transform 0.3s ease;
         }
         .card-title { font-size: 16px; font-weight: 600; }
         .card-actions { margin-left: auto; display: flex; gap: 8px; }
@@ -283,6 +304,36 @@
         .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
+        /* Flaticon Icon Styling */
+        .btn i, .card-actions i, .filter-btn i {
+            font-size: 14px;
+            transition: transform 0.2s ease;
+        }
+        .btn:hover:not(:disabled) i {
+            transform: scale(1.15);
+        }
+        .btn-success:hover:not(:disabled) i {
+            animation: iconPulse 0.6s ease;
+        }
+        .btn-danger:hover:not(:disabled) i {
+            animation: iconShake 0.4s ease;
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        @keyframes iconShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+        .card-actions .btn-ghost:hover i {
+            color: var(--accent);
+        }
+        .file-clear i {
+            font-size: 12px;
+        }
+
         /* Tooltips */
         [data-tooltip] { position: relative; }
         [data-tooltip]:hover::after {
@@ -328,6 +379,14 @@
             font-size: 48px; 
             margin-bottom: 10px; 
             animation: bounce 2s ease-in-out infinite;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-zone.has-file .upload-icon {
+            color: var(--success);
+            animation: successPop 0.5s ease;
         }
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
@@ -340,6 +399,11 @@
             0%, 100% { transform: rotate(0deg); }
             25% { transform: rotate(-10deg); }
             75% { transform: rotate(10deg); }
+        }
+        @keyframes successPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
         }
         .upload-text { color: var(--text-secondary); font-size: 14px; }
 
@@ -383,7 +447,18 @@
             font-size: 13px;
         }
 
-        .file-info-label { color: var(--text-secondary); }
+        .file-info-label { 
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        .file-info-label i {
+            transition: all 0.3s ease;
+        }
+        .file-info-row:hover .file-info-label i {
+            transform: scale(1.2);
+            color: var(--success);
+        }
 
         /* Data Preview */
         .data-preview {
@@ -536,8 +611,27 @@
         .stat-icon {
             font-size: 24px;
             margin-bottom: 4px;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
+        .stat-card:hover .stat-icon {
+            transform: scale(1.2);
+        }
+        .stat-card:hover .stat-icon i {
+            animation: statIconBounce 0.5s ease;
+        }
+        @keyframes statIconBounce {
+            0%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+            60% { transform: translateY(-3px); }
+        }
+        .stat-success .stat-icon { color: var(--success); }
+        .stat-error .stat-icon { color: var(--error); }
+        .stat-info .stat-icon { color: var(--accent); }
+        .stat-success:hover::before { background: linear-gradient(90deg, transparent, var(--success), transparent); }
+        .stat-error:hover::before { background: linear-gradient(90deg, transparent, var(--error), transparent); }
         .stat-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
         .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-success .stat-value { color: var(--success); }
@@ -657,8 +751,34 @@
             z-index: 1000;
         }
         .shortcuts-help.visible { display: block; }
-        .shortcuts-help h4 { margin-bottom: 10px; color: var(--text-secondary); }
-        .shortcut-item { display: flex; justify-content: space-between; gap: 20px; padding: 4px 0; }
+        .shortcuts-help h4 { 
+            margin-bottom: 10px; 
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        .shortcuts-help h4 i {
+            color: var(--accent);
+        }
+        .shortcut-item { 
+            display: flex; 
+            justify-content: space-between; 
+            gap: 20px; 
+            padding: 4px 0;
+            align-items: center;
+        }
+        .shortcut-item span:first-child {
+            display: flex;
+            align-items: center;
+        }
+        .shortcut-item i {
+            color: var(--accent);
+            transition: all 0.2s ease;
+        }
+        .shortcut-item:hover i {
+            transform: scale(1.2);
+            color: var(--success);
+        }
         .shortcut-key { background: var(--bg-card); padding: 2px 8px; border-radius: 4px; font-family: monospace; }
 
         /* Scrollbar */
@@ -731,8 +851,18 @@
         .empty-state-icon {
             font-size: 64px;
             margin-bottom: 16px;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             animation: float 3s ease-in-out infinite;
+            color: var(--accent);
+        }
+        .empty-state-icon i {
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover .empty-state-icon i {
+            transform: scale(1.1);
+            color: var(--success);
         }
         .empty-state-title {
             font-size: 18px;
@@ -838,11 +968,11 @@
 
     <div class="modal-overlay" id="stopModal">
         <div class="modal">
-            <h3>⏹ Stop Automation?</h3>
+            <h3><i class="fi fi-sr-stop-circle" style="margin-right: 10px; color: var(--error);"></i>Stop Automation?</h3>
             <p>Are you sure you want to stop? Progress will be lost.</p>
             <div class="modal-actions">
                 <button class="btn btn-ghost" onclick="closeStopModal()">Cancel</button>
-                <button class="btn btn-danger" onclick="confirmStop()">Stop</button>
+                <button class="btn btn-danger" onclick="confirmStop()"><i class="fi fi-sr-stop"></i> Stop</button>
             </div>
         </div>
     </div>
@@ -850,7 +980,7 @@
     <div class="container">
         <header>
             <div class="logo">
-                <span class="logo-icon">🤖</span>
+                <span class="logo-icon"><i class="fi fi-sr-robot"></i></span>
                 <h1>Web <span>Automation</span> Tool</h1>
                 <span class="logo-badge">Levi's</span>
             </div>
@@ -859,10 +989,10 @@
                     <span>●</span> Ready
                 </div>
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" data-tooltip="Toggle theme (T)">
-                    <span id="themeIcon">🌙</span>
+                    <span id="themeIcon"><i class="fi fi-sr-moon"></i></span>
                     <span class="theme-label">Dark</span>
                 </button>
-                <button class="btn btn-ghost btn-sm" onclick="toggleShortcuts()" data-tooltip="Keyboard shortcuts">⌨️</button>
+                <button class="btn btn-ghost btn-sm" onclick="toggleShortcuts()" data-tooltip="Keyboard shortcuts"><i class="fi fi-sr-keyboard"></i></button>
                 <span class="version">v3.0</span>
             </div>
         </header>
@@ -872,7 +1002,7 @@
                 <!-- Configuration -->
                 <div class="card" style="margin-bottom: 24px;">
                     <div class="card-header">
-                        <span class="card-icon">⚙️</span>
+                        <span class="card-icon"><i class="fi fi-sr-settings"></i></span>
                         <span class="card-title">Configuration</span>
                     </div>
                     
@@ -880,7 +1010,7 @@
                         <label>Target URL</label>
                         <div class="input-wrapper" id="urlWrapper">
                             <input type="url" id="targetUrl" value="https://www.google.com" placeholder="https://example.com" required>
-                            <span class="validation-icon" id="urlValidIcon">✓</span>
+                            <span class="validation-icon" id="urlValidIcon"><i class="fi fi-sr-check"></i></span>
                         </div>
                         <div class="input-error-text" id="urlError">Please enter a valid URL starting with http:// or https://</div>
                     </div>
@@ -928,19 +1058,19 @@
                         <div class="spinner" style="width: 40px; height: 40px; border-width: 4px;"></div>
                     </div>
                     <div class="card-header">
-                        <span class="card-icon">📁</span>
+                        <span class="card-icon"><i class="fi fi-sr-folder-open"></i></span>
                         <span class="card-title">Excel File</span>
                     </div>
                     
                     <div class="upload-zone" id="uploadZone" role="button" aria-label="Upload Excel file" tabindex="0">
-                        <button class="file-clear" onclick="clearFile(event)" data-tooltip="Remove file" aria-label="Remove file">✕</button>
+                        <button class="file-clear" onclick="clearFile(event)" data-tooltip="Remove file" aria-label="Remove file"><i class="fi fi-sr-cross-small"></i></button>
                         <div class="empty-state" id="uploadEmptyState">
-                            <span class="empty-state-icon">📊</span>
+                            <span class="empty-state-icon"><i class="fi fi-sr-file-excel"></i></span>
                             <div class="empty-state-title">No file selected</div>
                             <div class="empty-state-desc">Drag & drop your Excel file here, or click to browse</div>
                         </div>
                         <div class="upload-file-display hidden" id="uploadFileDisplay">
-                            <div class="upload-icon">✅</div>
+                            <div class="upload-icon"><i class="fi fi-sr-check-circle"></i></div>
                             <div class="upload-text" id="uploadFileName">file.xlsx</div>
                         </div>
                         <div class="upload-hint">Supports .xlsx, .xls files up to 16MB</div>
@@ -960,7 +1090,7 @@
                     </div>
 
                     <div id="fileError" class="error-boundary hidden">
-                        <div class="error-boundary-icon">⚠️</div>
+                        <div class="error-boundary-icon"><i class="fi fi-sr-triangle-warning" style="color: var(--warning); font-size: 48px;"></i></div>
                         <div class="error-boundary-title">Failed to load file</div>
                         <div class="error-boundary-message" id="fileErrorMessage">Something went wrong while processing your file.</div>
                         <div class="error-boundary-actions">
@@ -972,15 +1102,15 @@
                     <div id="fileInfo" class="hidden">
                         <div class="file-info">
                             <div class="file-info-row">
-                                <span class="file-info-label">📄 File:</span>
+                                <span class="file-info-label"><i class="fi fi-sr-document" style="margin-right: 6px; color: var(--accent);"></i>File:</span>
                                 <span id="fileName">-</span>
                             </div>
                             <div class="file-info-row">
-                                <span class="file-info-label">📊 Rows:</span>
+                                <span class="file-info-label"><i class="fi fi-sr-chart-histogram" style="margin-right: 6px; color: var(--accent);"></i>Rows:</span>
                                 <span id="fileRows">-</span>
                             </div>
                             <div class="file-info-row">
-                                <span class="file-info-label">💾 Size:</span>
+                                <span class="file-info-label"><i class="fi fi-sr-disk" style="margin-right: 6px; color: var(--accent);"></i>Size:</span>
                                 <span id="fileSize">-</span>
                             </div>
                         </div>
@@ -999,24 +1129,24 @@
                 <!-- Controls -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-icon">🎮</span>
+                        <span class="card-icon"><i class="fi fi-sr-gamepad"></i></span>
                         <span class="card-title">Controls</span>
                     </div>
                     
                     <div class="confirm-section" id="confirmInput">
-                        <p style="margin-bottom: 10px; font-weight: 600;">👆 Click on the INPUT FIELD in the browser</p>
+                        <p style="margin-bottom: 10px; font-weight: 600;"><i class="fi fi-sr-cursor-finger" style="margin-right: 8px;"></i>Click on the INPUT FIELD in the browser</p>
                         <p style="font-size: 12px;">Hover to highlight, click to select</p>
                     </div>
                     
                     <div class="confirm-section" id="confirmSubmit">
-                        <p style="margin-bottom: 10px; font-weight: 600;">👆 Click on the SUBMIT BUTTON in the browser</p>
+                        <p style="margin-bottom: 10px; font-weight: 600;"><i class="fi fi-sr-cursor-finger" style="margin-right: 8px;"></i>Click on the SUBMIT BUTTON in the browser</p>
                         <p style="font-size: 12px;">Hover to highlight, click to select</p>
                     </div>
                     
                     <div class="btn-group">
-                        <button class="btn btn-success" id="startBtn" onclick="startAutomation()">▶ Start</button>
-                        <button class="btn btn-warning" id="pauseBtn" onclick="togglePause()" disabled data-tooltip="Space">⏸ Pause</button>
-                        <button class="btn btn-danger" id="stopBtn" onclick="showStopModal()" disabled data-tooltip="Escape">⏹ Stop</button>
+                        <button class="btn btn-success" id="startBtn" onclick="startAutomation()"><i class="fi fi-sr-play"></i> Start</button>
+                        <button class="btn btn-warning" id="pauseBtn" onclick="togglePause()" disabled data-tooltip="Space"><i class="fi fi-sr-pause"></i> Pause</button>
+                        <button class="btn btn-danger" id="stopBtn" onclick="showStopModal()" disabled data-tooltip="Escape"><i class="fi fi-sr-stop"></i> Stop</button>
                     </div>
                 </div>
             </div>
@@ -1025,7 +1155,7 @@
                 <!-- Progress -->
                 <div class="card" style="margin-bottom: 24px;">
                     <div class="card-header">
-                        <span class="card-icon">📊</span>
+                        <span class="card-icon"><i class="fi fi-sr-chart-pie-alt"></i></span>
                         <span class="card-title">Progress</span>
                     </div>
                     
@@ -1042,22 +1172,22 @@
                     
                     <div class="stats-grid">
                         <div class="stat-card stat-success">
-                            <span class="stat-icon">✅</span>
+                            <span class="stat-icon"><i class="fi fi-sr-check-circle"></i></span>
                             <div class="stat-value" id="statSuccess">0</div>
                             <div class="stat-label">Success</div>
                         </div>
                         <div class="stat-card stat-error">
-                            <span class="stat-icon">❌</span>
+                            <span class="stat-icon"><i class="fi fi-sr-cross-circle"></i></span>
                             <div class="stat-value" id="statFailed">0</div>
                             <div class="stat-label">Failed</div>
                         </div>
                         <div class="stat-card stat-info">
-                            <span class="stat-icon">⏱️</span>
+                            <span class="stat-icon"><i class="fi fi-sr-hourglass-end"></i></span>
                             <div class="stat-value" id="statTime">00:00</div>
                             <div class="stat-label">Elapsed</div>
                         </div>
                         <div class="stat-card stat-info">
-                            <span class="stat-icon">⚡</span>
+                            <span class="stat-icon"><i class="fi fi-sr-bolt"></i></span>
                             <div class="stat-value" id="statSpeed">0</div>
                             <div class="stat-label">Per Min</div>
                         </div>
@@ -1067,19 +1197,19 @@
                 <!-- Log -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-icon">📝</span>
+                        <span class="card-icon"><i class="fi fi-sr-time-past"></i></span>
                         <span class="card-title">Activity Log</span>
                         <div class="card-actions">
-                            <button class="btn btn-ghost btn-sm" onclick="exportLogs()" data-tooltip="Download">📥</button>
-                            <button class="btn btn-ghost btn-sm" onclick="clearLog()" data-tooltip="Clear">🗑️</button>
+                            <button class="btn btn-ghost btn-sm" onclick="exportLogs()" data-tooltip="Download"><i class="fi fi-sr-download"></i></button>
+                            <button class="btn btn-ghost btn-sm" onclick="clearLog()" data-tooltip="Clear"><i class="fi fi-sr-trash"></i></button>
                         </div>
                     </div>
                     
                     <div class="log-filter">
                         <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="success">✓ Success</button>
-                        <button class="filter-btn" data-filter="error">✗ Errors</button>
-                        <button class="filter-btn" data-filter="warning">⚠ Warnings</button>
+                        <button class="filter-btn" data-filter="success"><i class="fi fi-sr-check" style="margin-right: 4px;"></i>Success</button>
+                        <button class="filter-btn" data-filter="error"><i class="fi fi-sr-cross" style="margin-right: 4px;"></i>Errors</button>
+                        <button class="filter-btn" data-filter="warning"><i class="fi fi-sr-exclamation" style="margin-right: 4px;"></i>Warnings</button>
                     </div>
                     
                     <div class="log-container" id="logContainer">
@@ -1094,11 +1224,11 @@
     </div>
 
     <div class="shortcuts-help" id="shortcutsHelp">
-        <h4>⌨️ Keyboard Shortcuts</h4>
-        <div class="shortcut-item"><span>⏯️ Pause/Resume</span><span class="shortcut-key">Space</span></div>
-        <div class="shortcut-item"><span>⏹️ Stop</span><span class="shortcut-key">Esc</span></div>
-        <div class="shortcut-item"><span>🎨 Toggle Theme</span><span class="shortcut-key">T</span></div>
-        <div class="shortcut-item"><span>❓ Show Help</span><span class="shortcut-key">?</span></div>
+        <h4><i class="fi fi-sr-keyboard" style="margin-right: 8px;"></i>Keyboard Shortcuts</h4>
+        <div class="shortcut-item"><span><i class="fi fi-sr-play-pause" style="margin-right: 6px;"></i>Pause/Resume</span><span class="shortcut-key">Space</span></div>
+        <div class="shortcut-item"><span><i class="fi fi-sr-stop" style="margin-right: 6px;"></i>Stop</span><span class="shortcut-key">Esc</span></div>
+        <div class="shortcut-item"><span><i class="fi fi-sr-paint-brush" style="margin-right: 6px;"></i>Toggle Theme</span><span class="shortcut-key">T</span></div>
+        <div class="shortcut-item"><span><i class="fi fi-sr-info" style="margin-right: 6px;"></i>Show Help</span><span class="shortcut-key">?</span></div>
         <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; color: var(--text-secondary); font-size: 10px;">Press ? to toggle this panel</div>
     </div>
 
@@ -1116,7 +1246,7 @@
             
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
-            document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+            document.getElementById('themeIcon').innerHTML = isLight ? '<i class="fi fi-sr-sun"></i>' : '<i class="fi fi-sr-moon"></i>';
             document.querySelector('.theme-label').textContent = isLight ? 'Light' : 'Dark';
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
         }
@@ -1124,7 +1254,7 @@
         function loadTheme() {
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
-                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeIcon').innerHTML = '<i class="fi fi-sr-sun"></i>';
                 document.querySelector('.theme-label').textContent = 'Light';
             }
         }
@@ -1133,7 +1263,8 @@
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</span> ${message}`;
+            const icon = type === 'success' ? '<i class="fi fi-sr-check-circle"></i>' : type === 'error' ? '<i class="fi fi-sr-cross-circle"></i>' : '<i class="fi fi-sr-info"></i>';
+            toast.innerHTML = `<span>${icon}</span> ${message}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 4000);
         }
@@ -1212,9 +1343,9 @@
 
         function resetControls() {
             document.getElementById('startBtn').disabled = false;
-            document.getElementById('startBtn').innerHTML = '▶ Start';
+            document.getElementById('startBtn').innerHTML = '<i class="fi fi-sr-play"></i> Start';
             document.getElementById('pauseBtn').disabled = true;
-            document.getElementById('pauseBtn').textContent = '⏸ Pause';
+            document.getElementById('pauseBtn').innerHTML = '<i class="fi fi-sr-pause"></i> Pause';
             document.getElementById('stopBtn').disabled = true;
             document.getElementById('confirmInput').classList.remove('active');
             document.getElementById('confirmSubmit').classList.remove('active');
@@ -1342,7 +1473,7 @@
             const result = await response.json();
             if (result.success) {
                 setStatus('running', 'Running');
-                document.getElementById('startBtn').innerHTML = '▶ Running...';
+                document.getElementById('startBtn').innerHTML = '<i class="fi fi-sr-play"></i> Running...';
                 document.getElementById('pauseBtn').disabled = false;
                 document.getElementById('stopBtn').disabled = false;
                 isRunning = true;
@@ -1360,13 +1491,13 @@
             const btn = document.getElementById('pauseBtn');
             const progressFill = document.getElementById('progressFill');
             if (isPaused) { 
-                btn.textContent = '▶ Resume'; 
+                btn.innerHTML = '<i class="fi fi-sr-play"></i> Resume'; 
                 setStatus('paused', 'Paused'); 
                 addLog('Paused', 'warning');
                 progressFill.classList.add('paused');
             }
             else { 
-                btn.textContent = '⏸ Pause'; 
+                btn.innerHTML = '<i class="fi fi-sr-pause"></i> Pause'; 
                 setStatus('running', 'Running'); 
                 addLog('Resumed', 'info');
                 progressFill.classList.remove('paused');
