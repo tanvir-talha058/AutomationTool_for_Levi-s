@@ -194,6 +194,38 @@
         .theme-toggle:hover { background: var(--border); }
         .theme-label { font-size: 12px; }
 
+        /* Connection Status */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+        }
+        .connection-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: connectionPulse 2s ease infinite;
+        }
+        .connection-status.disconnected .connection-dot {
+            background: var(--error);
+            animation: none;
+        }
+        .connection-status.reconnecting .connection-dot {
+            background: var(--warning);
+            animation: connectionPulse 0.5s ease infinite;
+        }
+        @keyframes connectionPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
         /* Main Layout */
         .main-grid {
             display: grid;
@@ -292,6 +324,39 @@
         }
         .card-title { font-size: 16px; font-weight: 600; }
         .card-actions { margin-left: auto; display: flex; gap: 8px; }
+
+        /* Collapsible Cards */
+        .card-collapse-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        .card-collapse-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+        .card-collapse-btn i {
+            transition: transform 0.3s ease;
+        }
+        .card.collapsed .card-collapse-btn i {
+            transform: rotate(-90deg);
+        }
+        .card-body {
+            transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            overflow: hidden;
+        }
+        .card.collapsed .card-body {
+            max-height: 0 !important;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
 
         /* Form Elements */
         .form-group { margin-bottom: 16px; }
@@ -880,6 +945,41 @@
         .stat-error .stat-value { color: var(--error); }
         .stat-info .stat-value { color: var(--accent); }
 
+        /* Stat value change animation */
+        .stat-value.changed {
+            animation: statBump 0.4s ease;
+        }
+        @keyframes statBump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .sound-toggle:hover { background: var(--border); }
+        .sound-toggle.muted i { color: var(--error); }
+        .sound-toggle.muted::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 16px;
+            background: var(--error);
+            transform: rotate(45deg);
+        }
+
         /* Log */
         .log-container {
             background: var(--bg-card);
@@ -926,8 +1026,61 @@
         .log-warning .log-message { color: var(--warning); }
         .log-info .log-message { color: var(--text-secondary); }
 
-        /* Log Filter */
-        .log-filter { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        /* Log Search & Filter */
+        .log-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .log-search {
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+        .log-search input {
+            width: 100%;
+            padding: 6px 12px 6px 32px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
+        .log-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        .log-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .log-action-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .log-action-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+        .log-action-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .log-filter { display: flex; gap: 6px; flex-wrap: wrap; }
         .filter-btn {
             padding: 4px 10px;
             border-radius: 12px;
@@ -1406,27 +1559,37 @@
                 <span class="logo-badge">Levi's</span>
             </div>
             <div class="header-actions">
+                <div class="connection-status" id="connectionStatus" data-tooltip="Server connection">
+                    <span class="connection-dot"></span>
+                    <span class="connection-text">Connected</span>
+                </div>
                 <div class="status-badge status-ready" id="statusBadge">
                     <span>●</span> Ready
                 </div>
+                <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" data-tooltip="Toggle sounds">
+                    <i class="fi fi-sr-volume" id="soundIcon"></i>
+                </button>
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" data-tooltip="Toggle theme (T)">
                     <span id="themeIcon"><i class="fi fi-sr-moon"></i></span>
                     <span class="theme-label">Dark</span>
                 </button>
                 <button class="btn btn-ghost btn-sm" onclick="toggleShortcuts()" data-tooltip="Keyboard shortcuts"><i class="fi fi-sr-keyboard"></i></button>
-                <span class="version">v3.0</span>
+                <span class="version">v3.1</span>
             </div>
         </header>
 
         <div class="main-grid">
             <div>
                 <!-- Configuration -->
-                <div class="card" style="margin-bottom: 24px;">
+                <div class="card" style="margin-bottom: 24px;" id="configCard">
                     <div class="card-header">
                         <span class="card-icon"><i class="fi fi-sr-settings"></i></span>
                         <span class="card-title">Configuration</span>
+                        <div class="card-actions">
+                            <button class="card-collapse-btn" onclick="toggleCard('configCard')" data-tooltip="Collapse"><i class="fi fi-sr-angle-down"></i></button>
+                        </div>
                     </div>
-                    
+                    <div class="card-body">
                     <div class="form-group">
                         <label>Target URL</label>
                         <div class="input-wrapper" id="urlWrapper">
@@ -1470,6 +1633,7 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="retryFailed" checked>
                         <label for="retryFailed">Retry failed rows (up to 3 times)</label>
+                    </div>
                     </div>
                 </div>
 
@@ -1626,6 +1790,17 @@
                         </div>
                     </div>
                     
+                    <div class="log-toolbar">
+                        <div class="log-search">
+                            <i class="fi fi-rr-search"></i>
+                            <input type="text" id="logSearchInput" placeholder="Search logs..." oninput="filterLogs()">
+                        </div>
+                        <div class="log-actions">
+                            <button class="log-action-btn active" id="autoScrollBtn" onclick="toggleAutoScroll()" data-tooltip="Auto-scroll">
+                                <i class="fi fi-sr-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="log-filter">
                         <button class="filter-btn active" data-filter="all">All</button>
                         <button class="filter-btn" data-filter="success"><i class="fi fi-sr-check" style="margin-right: 4px;"></i>Success</button>
@@ -1650,6 +1825,8 @@
         <div class="shortcut-item"><span><i class="fi fi-sr-stop" style="margin-right: 6px;"></i>Stop</span><span class="shortcut-key">Esc</span></div>
         <div class="shortcut-item"><span><i class="fi fi-sr-paint-brush" style="margin-right: 6px;"></i>Toggle Theme</span><span class="shortcut-key">T</span></div>
         <div class="shortcut-item"><span><i class="fi fi-sr-info" style="margin-right: 6px;"></i>Show Help</span><span class="shortcut-key">?</span></div>
+        <div class="shortcut-item"><span><i class="fi fi-sr-volume" style="margin-right: 6px;"></i>Toggle Sound</span><span class="shortcut-key">M</span></div>
+        <div class="shortcut-item"><span><i class="fi fi-sr-search" style="margin-right: 6px;"></i>Search Logs</span><span class="shortcut-key">/</span></div>
         <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; color: var(--text-secondary); font-size: 10px;">Press ? to toggle this panel</div>
     </div>
 
@@ -1657,8 +1834,15 @@
     <audio id="soundError" preload="auto"><source src="data:audio/wav;base64,UklGRl4FAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YToFAAD/+/j08e7q5+Th3drX1NHOy8jFwsC9u7m2tLKwr62rqaimpKKgnpybmZeVk5GQjo2LioiHhYSCgYB/fn18e3p5eHd2dXR0c3JxcXBwb29ub25tbW1sbGxsbGxsbGxsbW1tbW5ubm9vcHBxcXJyc3R0dXZ2d3h5ent8fX5/gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp+goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v8DBwsPExcbHyMnKy8zNzs/Q0dLT1NXW19jZ2tvc3d7f4OHi4+Tl5ufo6err7O3u7/Dx8vP09fb3+Pn6+/z9/v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/" type="audio/wav"></audio>
 
     <script>
-        const socket = io();
+        const socket = io({
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000
+        });
         let isPaused = false, isRunning = false, currentFilter = 'all', logs = [];
+        let autoScroll = true, soundEnabled = true, logSearchQuery = '';
+        let previousStats = { success: 0, failed: 0 };
 
         function toggleTheme() {
             const toggle = document.getElementById('themeToggle');
@@ -1673,12 +1857,33 @@
         }
 
         function loadTheme() {
-            if (localStorage.getItem('theme') === 'light') {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Use saved theme, or fall back to system preference
+            const isLight = savedTheme === 'light' || (savedTheme === null && !prefersDark);
+            
+            if (isLight) {
                 document.body.classList.add('light-mode');
                 document.getElementById('themeIcon').innerHTML = '<i class="fi fi-sr-sun"></i>';
                 document.querySelector('.theme-label').textContent = 'Light';
             }
         }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (localStorage.getItem('theme') === null) {
+                if (e.matches) {
+                    document.body.classList.remove('light-mode');
+                    document.getElementById('themeIcon').innerHTML = '<i class="fi fi-sr-moon"></i>';
+                    document.querySelector('.theme-label').textContent = 'Dark';
+                } else {
+                    document.body.classList.add('light-mode');
+                    document.getElementById('themeIcon').innerHTML = '<i class="fi fi-sr-sun"></i>';
+                    document.querySelector('.theme-label').textContent = 'Light';
+                }
+            }
+        });
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
@@ -1690,8 +1895,43 @@
             setTimeout(() => toast.remove(), 4000);
         }
 
-        socket.on('connect', () => addLog('Connected to server', 'success'));
-        socket.on('disconnect', () => { addLog('Disconnected', 'error'); setStatus('error', 'Disconnected'); });
+        socket.on('connect', () => {
+            addLog('Connected to server', 'success');
+            updateConnectionStatus('connected');
+        });
+        socket.on('disconnect', () => {
+            addLog('Disconnected from server', 'error');
+            setStatus('error', 'Disconnected');
+            updateConnectionStatus('disconnected');
+        });
+        socket.on('reconnecting', (attempt) => {
+            addLog(`Reconnecting... (attempt ${attempt})`, 'warning');
+            updateConnectionStatus('reconnecting');
+        });
+        socket.on('reconnect', () => {
+            addLog('Reconnected to server', 'success');
+            updateConnectionStatus('connected');
+            setStatus('ready', 'Ready');
+        });
+        socket.on('reconnect_failed', () => {
+            addLog('Failed to reconnect. Please refresh the page.', 'error');
+            showToast('Connection lost. Please refresh.', 'error');
+        });
+
+        function updateConnectionStatus(status) {
+            const el = document.getElementById('connectionStatus');
+            const text = el.querySelector('.connection-text');
+            el.classList.remove('disconnected', 'reconnecting');
+            if (status === 'connected') {
+                text.textContent = 'Connected';
+            } else if (status === 'disconnected') {
+                el.classList.add('disconnected');
+                text.textContent = 'Disconnected';
+            } else if (status === 'reconnecting') {
+                el.classList.add('reconnecting');
+                text.textContent = 'Reconnecting...';
+            }
+        }
         socket.on('connected', (data) => { if (data.config) loadConfigToUI(data.config); });
         socket.on('log', (data) => addLog(data.message, data.level, data.timestamp));
         socket.on('progress', (data) => updateProgress(data));
@@ -1709,8 +1949,31 @@
         socket.on('automation_stopped', () => { setStatus('ready', 'Ready'); resetControls(); isRunning = false; });
         socket.on('automation_error', (data) => { addLog('Error: ' + data.error, 'error'); showToast(data.error, 'error'); });
         socket.on('play_sound', (data) => {
-            document.getElementById(data.type === 'complete' ? 'soundComplete' : 'soundError').play().catch(() => {});
+            if (soundEnabled) {
+                document.getElementById(data.type === 'complete' ? 'soundComplete' : 'soundError').play().catch(() => {});
+            }
         });
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggle');
+            const icon = document.getElementById('soundIcon');
+            btn.classList.toggle('muted', !soundEnabled);
+            icon.className = soundEnabled ? 'fi fi-sr-volume' : 'fi fi-sr-volume-mute';
+            localStorage.setItem('soundEnabled', soundEnabled);
+            showToast(soundEnabled ? 'Sound enabled' : 'Sound muted', 'info');
+        }
+
+        function loadSoundSetting() {
+            const saved = localStorage.getItem('soundEnabled');
+            if (saved !== null) {
+                soundEnabled = saved === 'true';
+                const btn = document.getElementById('soundToggle');
+                const icon = document.getElementById('soundIcon');
+                btn.classList.toggle('muted', !soundEnabled);
+                icon.className = soundEnabled ? 'fi fi-sr-volume' : 'fi fi-sr-volume-mute';
+            }
+        }
 
         function loadConfigToUI(config) {
             if (config.url) document.getElementById('targetUrl').value = config.url;
@@ -1731,9 +1994,45 @@
 
         function renderLogs() {
             const container = document.getElementById('logContainer');
-            const filtered = currentFilter === 'all' ? logs : logs.filter(l => l.level === currentFilter);
-            container.innerHTML = filtered.map(l => `<div class="log-entry log-${l.level}"><span class="log-time">${l.time}</span><span class="log-message">${l.message}</span></div>`).join('');
-            container.scrollTop = container.scrollHeight;
+            let filtered = currentFilter === 'all' ? logs : logs.filter(l => l.level === currentFilter);
+            
+            // Apply search filter
+            if (logSearchQuery) {
+                const query = logSearchQuery.toLowerCase();
+                filtered = filtered.filter(l => l.message.toLowerCase().includes(query));
+            }
+            
+            container.innerHTML = filtered.map(l => {
+                let message = l.message;
+                // Highlight search matches
+                if (logSearchQuery) {
+                    const regex = new RegExp(`(${escapeRegex(logSearchQuery)})`, 'gi');
+                    message = message.replace(regex, '<mark style="background: var(--warning); color: black; padding: 0 2px; border-radius: 2px;">$1</mark>');
+                }
+                return `<div class="log-entry log-${l.level}"><span class="log-time">${l.time}</span><span class="log-message">${message}</span></div>`;
+            }).join('');
+            
+            if (autoScroll) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function filterLogs() {
+            logSearchQuery = document.getElementById('logSearchInput').value;
+            renderLogs();
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            const btn = document.getElementById('autoScrollBtn');
+            btn.classList.toggle('active', autoScroll);
+            if (autoScroll) {
+                document.getElementById('logContainer').scrollTop = document.getElementById('logContainer').scrollHeight;
+            }
         }
 
         function clearLog() { logs = []; document.getElementById('logContainer').innerHTML = ''; addLog('Log cleared', 'info'); }
@@ -1743,8 +2042,10 @@
             document.getElementById('progressText').textContent = `${data.current} / ${data.total}`;
             document.getElementById('progressPercent').textContent = `${data.percent}%`;
             document.getElementById('progressFill').style.width = `${data.percent}%`;
-            document.getElementById('statSuccess').textContent = data.success;
-            document.getElementById('statFailed').textContent = data.failed;
+            // Animate stat changes
+            updateStatWithAnimation('statSuccess', data.success, previousStats.success);
+            updateStatWithAnimation('statFailed', data.failed, previousStats.failed);
+            previousStats = { success: data.success, failed: data.failed };
             document.getElementById('statSpeed').textContent = data.speed;
             const mins = Math.floor(data.elapsed / 60), secs = data.elapsed % 60;
             document.getElementById('statTime').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
@@ -1943,10 +2244,78 @@
                 case 'Escape': if (isRunning) showStopModal(); else closeStopModal(); break;
                 case 't': case 'T': toggleTheme(); break;
                 case '?': toggleShortcuts(); break;
+                case 'm': case 'M': toggleSound(); break;
+                case '/': e.preventDefault(); document.getElementById('logSearchInput').focus(); break;
+            }
+        });
+
+        function updateStatWithAnimation(id, newValue, oldValue) {
+            const el = document.getElementById(id);
+            el.textContent = newValue;
+            if (newValue !== oldValue) {
+                el.classList.remove('changed');
+                void el.offsetWidth; // Trigger reflow
+                el.classList.add('changed');
+            }
+        }
+
+        function toggleCard(cardId) {
+            const card = document.getElementById(cardId);
+            card.classList.toggle('collapsed');
+            // Save collapsed state
+            const collapsed = JSON.parse(localStorage.getItem('collapsedCards') || '{}');
+            collapsed[cardId] = card.classList.contains('collapsed');
+            localStorage.setItem('collapsedCards', JSON.stringify(collapsed));
+        }
+
+        function loadCollapsedCards() {
+            const collapsed = JSON.parse(localStorage.getItem('collapsedCards') || '{}');
+            Object.keys(collapsed).forEach(cardId => {
+                if (collapsed[cardId]) {
+                    const card = document.getElementById(cardId);
+                    if (card) card.classList.add('collapsed');
+                }
+            });
+        }
+
+        // Save form settings to localStorage
+        function saveSettings() {
+            const settings = {
+                url: document.getElementById('targetUrl').value,
+                browser: document.getElementById('browser').value,
+                delay: document.getElementById('delay').value,
+                startRow: document.getElementById('startRow').value,
+                endRow: document.getElementById('endRow').value,
+                headless: document.getElementById('headless').checked,
+                retryFailed: document.getElementById('retryFailed').checked
+            };
+            localStorage.setItem('automationSettings', JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('automationSettings') || '{}');
+            if (settings.url) document.getElementById('targetUrl').value = settings.url;
+            if (settings.browser) document.getElementById('browser').value = settings.browser;
+            if (settings.delay) document.getElementById('delay').value = settings.delay;
+            if (settings.startRow !== undefined) document.getElementById('startRow').value = settings.startRow;
+            if (settings.endRow !== undefined) document.getElementById('endRow').value = settings.endRow;
+            if (settings.headless !== undefined) document.getElementById('headless').checked = settings.headless;
+            if (settings.retryFailed !== undefined) document.getElementById('retryFailed').checked = settings.retryFailed;
+        }
+
+        // Auto-save settings on change
+        ['targetUrl', 'browser', 'delay', 'startRow', 'endRow', 'headless', 'retryFailed'].forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('change', saveSettings);
+            if (el.type === 'text' || el.type === 'url' || el.type === 'number') {
+                el.addEventListener('input', saveSettings);
             }
         });
 
         loadTheme();
+        loadSoundSetting();
+        loadSettings();
+        loadCollapsedCards();
         
         // Form Validation
         function validateUrl() {
