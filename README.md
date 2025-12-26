@@ -4,9 +4,25 @@
 ![Selenium](https://img.shields.io/badge/Selenium-4.0+-43B02A?logo=selenium&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-2.3+-black?logo=flask&logoColor=white)
 ![WebSocket](https://img.shields.io/badge/WebSocket-Real--time-purple)
+![Version](https://img.shields.io/badge/Version-3.1-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-A modern, web-based automation tool for bulk data entry into websites using Selenium. Features a sleek dark-themed UI with real-time progress tracking, multi-browser support, and intuitive click-to-select element identification.
+A modern, web-based automation tool for bulk data entry into websites using Selenium. Features a sleek dark/light themed UI with real-time progress tracking, multi-browser support, and intuitive click-to-select element identification.
+
+---
+
+## 🆕 What's New in v3.1
+
+- 🚀 **Auto-opens browser** - App automatically launches in your default browser
+- 📚 **Quick Start Guide** - Interactive tutorial for first-time users
+- ⚡ **Speed Presets** - One-click Fast/Normal/Careful mode switching
+- 📋 **Recent URLs** - Autocomplete with your last 10 URLs
+- ⏱️ **Time Estimates** - See how long automation will take before starting
+- ✅ **Confirmation Modal** - Review settings before starting
+- 📊 **Success Rate** - Real-time success percentage tracking
+- 🔴 **Failed Rows Panel** - View, copy, or export failed entries
+- 🎉 **Completion UI** - Beautiful completion screen with quick actions
+- 🌙 **Dark/Light Theme** - Follows system preference with manual toggle
 
 ---
 
@@ -45,15 +61,21 @@ A modern, web-based automation tool for bulk data entry into websites using Sele
 
 | Feature | Description |
 |---------|-------------|
-| 🌐 **Modern Web UI** | Clean, responsive dark-themed interface built with HTML/CSS/JS |
+| 🌐 **Modern Web UI** | Clean, responsive dark/light themed interface built with HTML/CSS/JS |
 | ⚡ **Real-time Updates** | Live progress tracking via WebSocket - no page refresh needed |
 | 🖱️ **Click-to-Select** | Simply click on webpage elements to identify input fields and buttons |
 | 🔄 **Pause/Resume** | Full control over automation - pause anytime and resume where you left off |
-| 📈 **Live Statistics** | Track success/failure rates, speed (entries/min), and elapsed time |
+| 📈 **Live Statistics** | Track success/failure rates, speed (entries/min), ETA, and elapsed time |
 | 🌐 **Multi-Browser** | Supports Chrome, Firefox, and Edge browsers |
-| 📝 **Activity Log** | Color-coded real-time logging with timestamps |
-| 📊 **Excel Support** | Import .xlsx and .xls files with column selection |
+| 📝 **Activity Log** | Color-coded real-time logging with search and filter |
+| 📊 **Excel Support** | Import .xlsx and .xls files with column selection and preview |
 | 🎯 **Row Range** | Process specific row ranges from your data |
+| ⚡ **Speed Presets** | Quick switch between Fast, Normal, and Careful modes |
+| 📋 **Recent URLs** | Auto-complete with history of your last 10 URLs |
+| ⏱️ **Time Estimates** | See estimated completion time before starting |
+| 🔴 **Failed Rows** | View, copy, or export failed entries as CSV |
+| ⌨️ **Keyboard Shortcuts** | Space (pause), Escape (stop), T (theme), and more |
+| 🔊 **Sound Notifications** | Audio alerts on completion or error (toggleable) |
 
 ---
 
@@ -99,42 +121,74 @@ python automation.py
 ```bash
 python automation.py
 ```
-The server will start and display:
+The server will start and automatically open your browser:
 ```
-==================================================
-🤖 Web Automation Tool - Modern UI
-==================================================
-Open your browser and go to: http://localhost:5000
-==================================================
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   🤖  WEB AUTOMATION TOOL  v3.1                             ║
+║   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━                           ║
+║                                                              ║
+║   🌐  URL: http://localhost:5000                            ║
+║   📁  Upload Excel files to automate data entry             ║
+║   ⌨️   Press Ctrl+C to stop the server                       ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 ```
 
 ### 2️⃣ Open the Web Interface
-Navigate to **http://localhost:5000** in your browser.
+The app **automatically opens** in your default browser. If not, navigate to **http://localhost:5000**.
 
-### 3️⃣ Configure Settings
+### 3️⃣ First-Time Setup
+On first visit, you'll see a **Quick Start Guide** with step-by-step instructions.
+
+### 4️⃣ Configure Settings
 | Setting | Description |
 |---------|-------------|
-| **Target URL** | The website where data will be entered |
+| **Speed Preset** | Choose Fast (0.5s), Normal (2s), or Careful (5s) mode |
+| **Target URL** | The website where data will be entered (with recent URL autocomplete) |
 | **Browser** | Choose Chrome, Firefox, or Edge |
 | **Delay** | Seconds to wait between each entry (0.5 - 30) |
 | **Start/End Row** | Process specific rows (-1 = all) |
+| **Headless Mode** | Run browser invisibly in background |
+| **Retry Failed** | Automatically retry failed entries up to 3 times |
 
-### 4️⃣ Upload Excel File
+### 5️⃣ Upload Excel File
 - Click the upload zone or drag & drop your `.xlsx`/`.xls` file
 - Select the column containing the data to automate
+- See **estimated completion time** based on your settings
 
-### 5️⃣ Run Automation
-1. Click **▶ Start** - A browser window will open
-2. **Click on the input field** you want to automate
-3. Click **✓ Confirm Input Field** in the web UI
+### 6️⃣ Run Automation
+1. Click **▶ Start** - Review the confirmation dialog with settings summary
+2. Click **Start Automation** - A browser window will open
+3. **Click on the input field** you want to automate (highlighted in blue)
 4. **Click on the submit button** on the webpage
-5. Click **✓ Confirm Submit Button** in the web UI
-6. Watch the automation run! 🎉
+5. Watch the automation run with real-time progress! 🎉
 
-### 6️⃣ Control Automation
-- **⏸ Pause** - Temporarily halt automation
-- **▶ Resume** - Continue from where you paused
-- **⏹ Stop** - End automation completely
+### 7️⃣ Control Automation
+| Control | Shortcut | Description |
+|---------|----------|-------------|
+| **⏸ Pause** | `Space` | Temporarily halt automation |
+| **▶ Resume** | `Space` | Continue from where you paused |
+| **⏹ Stop** | `Escape` | End automation completely |
+
+### 8️⃣ After Completion
+- View **completion summary** with success rate
+- **Failed rows panel** shows any entries that failed
+- **Export failed rows** as CSV for review
+- Click **New Run** to start fresh
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Space` | Pause/Resume automation |
+| `Escape` | Stop automation |
+| `T` | Toggle dark/light theme |
+| `M` | Toggle sound notifications |
+| `/` | Focus log search |
+| `?` | Show keyboard shortcuts |
 
 ---
 
@@ -158,10 +212,20 @@ AutomationTool_for_Levi-s/
 | Option | Default | Description |
 |--------|---------|-------------|
 | Target URL | `https://www.google.com` | Website to automate |
-| Browser | Chrome | Browser to use |
+| Browser | Chrome | Browser to use (Chrome, Firefox, Edge) |
 | Delay | 2 seconds | Wait time between entries |
 | Start Row | 0 | First row to process |
 | End Row | -1 | Last row (-1 = all rows) |
+| Headless | Off | Run browser invisibly |
+| Retry Failed | On | Retry failed entries (up to 3 times) |
+
+### Speed Presets
+
+| Preset | Delay | Retry | Best For |
+|--------|-------|-------|----------|
+| ⚡ **Fast** | 0.5s | Off | Fast, reliable websites |
+| ▶️ **Normal** | 2s | On | Most websites |
+| 🐢 **Careful** | 5s | On | Slow or unreliable websites |
 
 ---
 
@@ -171,8 +235,21 @@ AutomationTool_for_Levi-s/
 |-------|----------|
 | Browser doesn't open | Ensure the browser is installed and up-to-date |
 | WebDriver error | Selenium 4+ auto-manages drivers; update Selenium if issues persist |
-| Port 5000 in use | The app will try 5001, or stop the conflicting process |
-| Excel file not loading | Ensure file is `.xlsx` or `.xls` format |
+| Port 5000 in use | Stop the conflicting process or change port in code |
+| Excel file not loading | Ensure file is `.xlsx` or `.xls` format, max 16MB |
+| Browser opens but no page | Check if URL is valid (must start with http:// or https://) |
+| Elements not clickable | Increase delay time or use Careful mode |
+| High failure rate | Enable "Retry Failed" option and use slower delay |
+
+---
+
+## 💡 Tips & Best Practices
+
+1. **Test URL first** - Use the "Test URL" button to verify the website loads correctly
+2. **Start small** - Test with 5-10 rows before processing large datasets
+3. **Use Careful mode** - For slow or complex websites, use the Careful preset
+4. **Check failed rows** - Export failed rows to analyze patterns and fix issues
+5. **Save your settings** - Settings are auto-saved to your browser
 
 ---
 
@@ -207,6 +284,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Made with ❤️ for automating repetitive tasks
 
 ⭐ **Star this repo if you found it helpful!** ⭐
+
+**[Report Bug](https://github.com/tanvir-talha058/AutomationTool_for_Levi-s/issues) · [Request Feature](https://github.com/tanvir-talha058/AutomationTool_for_Levi-s/issues)**
 
 </div>
 
