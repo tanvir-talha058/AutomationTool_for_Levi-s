@@ -2,6 +2,7 @@
 
 ## 🎨 Visual Enhancements
 
+
 - [x] Two-panel layout (left: config, right: progress/logs)
 - [x] Dark/Light mode toggle in header
 - [x] Modern color scheme (both themes)
