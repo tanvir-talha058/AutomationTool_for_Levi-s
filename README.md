@@ -7,6 +7,7 @@
 ![Version](https://img.shields.io/badge/Version-3.1-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+
 A modern, web-based automation tool for bulk data entry into websites using Selenium. Features a sleek dark/light themed UI with real-time progress tracking, multi-browser support, and intuitive click-to-select element identification.
 
 ---
