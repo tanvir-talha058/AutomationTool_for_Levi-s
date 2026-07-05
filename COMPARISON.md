@@ -1,7 +1,6 @@
 # Before & After Comparison
 ## Visual Side-by-Side
 
-
 ### BEFORE (Version 1.0)
 ```
 ┌──────────────────────────────┐
