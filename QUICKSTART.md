@@ -12,6 +12,7 @@ Or install individually:
 pip install pandas openpyxl selenium
 ```
 
+
 ### 2. Install ChromeDriver
 
 **Option A: Using Chrome for Testing**
